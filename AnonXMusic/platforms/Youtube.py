@@ -11,22 +11,24 @@ from youtubesearchpython.__future__ import VideosSearch
 from AnonXMusic.utils.database import is_on_off
 from AnonXMusic.utils.formatters import time_to_seconds
 
-async def shell_cmd(cmd):
-    proc = await asyncio.create_subprocess_shell(
-        cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    out, errorz = await proc.communicate()
-    if errorz:
-        if "unavailable videos are hidden" in (errorz.decode("utf-8")).lower():
-            return out.decode("utf-8")
-        else:
-            return errorz.decode("utf-8")
-    return out.decode("utf-8")
+async def execute_shell_command(cmd):
+    try:
+        proc = await asyncio.create_subprocess_shell(
+            cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        out, errorz = await proc.communicate()
+        if errorz:
+            if "unavailable videos are hidden" in (errorz.decode("utf-8")).lower():
+                return out.decode("utf-8")
+            else:
+                return errorz.decode("utf-8")
+        return out.decode("utf-8")
+    except Exception as e:
+        return f"Error: {e}"
 
-
-cookies_file = "AnonXMusic/assets/cookies.txt"
+cookies_file = os.environ.get("COOKIES_FILE", "AnonXMusic/assets/cookies.txt")
 
 class YouTubeAPI:
     def __init__(self):
