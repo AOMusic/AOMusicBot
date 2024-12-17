@@ -46,7 +46,7 @@ class Anony(Client):
             )
             exit()
 
-        a = await self.get_chat_member(config.LOGGER_ID, (link unavailable))
+        a = await self.get_chat_member(config.LOGGER_ID, link)
         if a.status != ChatMemberStatus.ADMINISTRATOR:
             LOGGER(__name__).error(
                 "Please promote your bot as an admin in your log group/channel."
