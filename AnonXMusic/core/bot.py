@@ -27,25 +27,35 @@ class Anony(Client):
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                await Anony.stream_call(
-    "(link unavailable)",
-    chat_id=None,
-    disable_notifications=False,
-    replay=False,
-    link=None,
-                )
-    try:
-    await Anony.stream_call("(link unavailable)")
-except errors.ChannelInvalid as e:
-    LOGGER("AnonXMusic").error(
-        "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
-    )
-    exit()
-except errors.PeerIdInvalid as e:
-    LOGGER("AnonXMusic").error(
-        "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
-    )
-    exit()
+                text=f"<u><b>» {self.mention} ʙᴏᴛ sᴛᴀʀᴛᴇᴅ :</b><u>\n\nɪᴅ : <code>{(link unavailable)}</code>\nɴᴀᴍᴇ : {self.name}\nᴜsᴇʀɴᴀᴍᴇ : @{self.username}"
+            )
+        except errors.ChannelInvalid as e:
+            LOGGER("AnonXMusic").error(
+                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+            )
+            exit()
+        except errors.PeerIdInvalid as e:
+            LOGGER("AnonXMusic").error(
+                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+            )
+            exit()
+        except Exception as ex:
+            LOGGER(__name__).error(
+                f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
+            )
+            exit()
+        try:
+            await Anony.stream_call("(link unavailable)")
+        except errors.ChannelInvalid as e:
+            LOGGER("AnonXMusic").error(
+                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+            )
+            exit()
+        except errors.PeerIdInvalid as e:
+            LOGGER("AnonXMusic").error(
+                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+            )
+            exit()
         except Exception as ex:
             LOGGER(__name__).error(
                 f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
