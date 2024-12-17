@@ -8,8 +8,8 @@ from .logging import LOGGER
 #Initializing Directories
 dirr()
 
-Initializing Database
-#dbb()
+#Initializing Database
+dbb()
 
 #Initializing Heroku
 heroku()
