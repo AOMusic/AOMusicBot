@@ -12,7 +12,7 @@ SUDOERS = filters.user()
 #Heroku App
 HAPP = None
 
-Boot Time
+#Boot Time
 _boot_ = time.time()
 
 def is_heroku():
@@ -24,7 +24,7 @@ def is_heroku():
     """
     return "heroku" in socket.getfqdn()
 
-Heroku Config Vars
+#Heroku Config Vars
 XCB = [
     "/",
     "@",
