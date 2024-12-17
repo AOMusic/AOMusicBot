@@ -1,6 +1,6 @@
 import logging
 
-Logging Configuration
+#Logging Configuration
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s - %(levelname)s] - %(name)s - %(message)s",
