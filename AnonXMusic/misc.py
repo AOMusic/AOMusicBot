@@ -1,6 +1,11 @@
 import os
+import asyncio
 def is_heroku():
     return os.environ.get("DYNO", None) is not None
+def dbb():
+    global db
+    db = {}
+    LOGGER(__name__).info(f"Local Database Initialized.")
 async def sudo():
     global SUDOERS
     SUDOERS.add(config.OWNER_ID)
@@ -15,14 +20,19 @@ async def sudo():
     if sudoers:
         for user_id in sudoers:
             SUDOERS.add(user_id)
-async def heroku():
+def heroku():
     global HAPP
     if is_heroku:
         if config.HEROKU_API_KEY and config.HEROKU_APP_NAME:
             try:
                 Heroku = heroku3.from_key(config.HEROKU_API_KEY)
-                HAPP = await Heroku.app(config.HEROKU_APP_NAME)
+                HAPP = Heroku.app(config.HEROKU_APP_NAME)
             except BaseException:
                 LOGGER(__name__).warning(
                     f"Please make sure your Heroku API Key and Your App name are configured correctly in the heroku."
-    )
+                )
+async def main():
+    dbb()
+    await sudo()
+    heroku()
+asyncio.run(main())
