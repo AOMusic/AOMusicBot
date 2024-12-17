@@ -176,7 +176,7 @@ class YouTubeAPI:
 
         async def download(self, link: str, mystic, video: Union[bool, str] = None, songaudio: Union[bool, str] = None,
                    songvideo: Union[bool, str] = None, format_id: Union[bool, str] = None, title: Union[bool, str] = None) -> str:
-    """Download the video/audio based on specified options."""
+    #"""Download the video/audio based on specified options."""
     loop = asyncio.get_running_loop()
 
     def download_audio():
