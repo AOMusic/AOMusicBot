@@ -5,23 +5,23 @@ from AnonXMusic.core.userbot import Userbot
 from AnonXMusic.misc import dbb, heroku
 from .logging import LOGGER
 
-Initializing Directories
+#Initializing Directories
 dirr()
 
 Initializing Database
-dbb()
+#dbb()
 
-Initializing Heroku
+#Initializing Heroku
 heroku()
 
-Initializing Bot and Userbot
+#Initializing Bot and Userbot
 app = Anony()
 userbot = Userbot()
 
-Importing Platforms
+#Importing Platforms
 from .platforms import *
 
-Initializing Platforms
+#Initializing Platforms
 Apple = AppleAPI()
 Carbon = CarbonAPI()
 SoundCloud = SoundAPI()
