@@ -34,11 +34,13 @@ class Anony(Client):
     replay=False,
     link=None,
                 )
-        except (errors.ChannelInvalid, errors.PeerIdInvalid):
-            LOGGER(__name__).error(
-                "Bot has failed to access the log group/channel. Make sure that you have added your bot to your log group/channel."
-            )
-            exit()
+        try:
+    await Anony.stream_call("(link unavailable)")
+except (errors.ChannelInvalid, errors.PeerIdInvalid) as e:
+    LOGGER("AnonXMusic").error(
+        "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+    )
+    exit()
         except Exception as ex:
             LOGGER(__name__).error(
                 f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
