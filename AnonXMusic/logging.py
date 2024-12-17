@@ -11,7 +11,7 @@ logging.basicConfig(
     ],
 )
 
-Suppressing Third-Party Library Logs
+#Suppressing Third-Party Library Logs
 logging.getLogger("httpx").setLevel(logging.ERROR)
 logging.getLogger("pymongo").setLevel(logging.ERROR)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
