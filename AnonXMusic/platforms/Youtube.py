@@ -174,15 +174,112 @@ class YouTubeAPI:
                     ydl.download([link])
                 return file_path
 
-        def download_video():
-            ydl_opts = {
-                "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
-                "outtmpl": f"downloads/{title}.%(ext)s",
-                "geo_bypass": True,
-                "nocheckcertificate": True,
-                "quiet": True,
-                "no_warnings": True,
-                "cookiefile": cookies_file,
-            }
-            with yt_dlp.YoutubeDL(ydl_opts) as y
-        
+        async def download(self, link: str, mystic, video: Union[bool, str] = None, songaudio: Union[bool, str] = None,
+                   songvideo: Union[bool, str] = None, format_id: Union[bool, str] = None, title: Union[bool, str] = None) -> str:
+    """Download the video/audio based on specified options."""
+    loop = asyncio.get_running_loop()
+
+    def download_audio():
+        ydl_opts = {
+            "format": "bestaudio/best",
+            "outtmpl": f"downloads/{title}.%(ext)s",
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "quiet": True,
+            "no_warnings": True,
+            "cookiefile": cookies_file,
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(link, download=False)
+            file_path = f"downloads/{info['id']}.{info['ext']}"
+            if not os.path.exists(file_path):
+                ydl.download([link])
+            return file_path
+
+    def download_video():
+        ydl_opts = {
+            "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
+            "outtmpl": f"downloads/{title}.%(ext)s",
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "quiet": True,
+            "no_warnings": True,
+            "cookiefile": cookies_file,
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(link, download=False)
+            file_path = f"downloads/{info['id']}.{info['ext']}"
+            if not os.path.exists(file_path):
+                ydl.download([link])
+            return file_path
+
+    def song_video_dl():
+        formats = f"{format_id}+140"
+        fpath = f"downloads/{title}"
+        ydl_optssx = {
+            "format": formats,
+            "outtmpl": fpath,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "quiet": True,
+            "no_warnings": True,
+            "prefer_ffmpeg": True,
+            "merge_output_format": "mp4",
+            "cookiefile": cookies_file,
+        }
+        with yt_dlp.YoutubeDL(ydl_optssx) as ydl:
+            ydl.download([link])
+
+    def song_audio_dl():
+        fpath = f"downloads/{title}.%(ext)s"
+        ydl_optssx = {
+            "format": format_id,
+            "outtmpl": fpath,
+            "geo_bypass": True,
+            "nocheckcertificate": True,
+            "quiet": True,
+            "no_warnings": True,
+            "prefer_ffmpeg": True,
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+            ],
+            "cookiefile": cookies_file,
+        }
+        with yt_dlp.YoutubeDL(ydl_optssx) as ydl:
+            ydl.download([link])
+
+    # Determine which download function to run
+    if songvideo:
+        await loop.run_in_executor(None, song_video_dl)
+        fpath = f"downloads/{title}.mp4"
+        return fpath
+    elif songaudio:
+        await loop.run_in_executor(None, song_audio_dl)
+        fpath = f"downloads/{title}.mp3"
+        return fpath
+    elif video:
+        # Check if a direct video download is allowed
+        if await is_on_off(1):
+            return await loop.run_in_executor(None, download_video)
+        else:
+            proc = await asyncio.create_subprocess_exec(
+                "yt-dlp",
+                "--cookies", cookies_file,
+                "-g", "-f", "best[height<=?720][width<=?1280]",
+                f"{link}",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await proc.communicate()
+            if stdout:
+                downloaded_file = stdout.decode().split("\n")[0]
+                return downloaded_file
+            else:
+                return stderr.decode()
+    else:
+        return await loop.run_in_executor(None, download_audio)
+    
