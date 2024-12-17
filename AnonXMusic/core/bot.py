@@ -34,7 +34,7 @@ class Anony(Client):
     replay=False,
     link=None,
                 )
-   try:
+    try:
     await Anony.stream_call("(link unavailable)")
 except errors.ChannelInvalid as e:
     LOGGER("AnonXMusic").error(
