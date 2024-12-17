@@ -36,7 +36,12 @@ class Anony(Client):
                 )
         try:
     await Anony.stream_call("(link unavailable)")
-except (errors.ChannelInvalid, errors.PeerIdInvalid) as e:
+except errors.ChannelInvalid as e:
+    LOGGER("AnonXMusic").error(
+        "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+    )
+    exit()
+except errors.PeerIdInvalid as e:
     LOGGER("AnonXMusic").error(
         "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
     )
