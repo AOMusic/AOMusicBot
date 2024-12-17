@@ -24,14 +24,15 @@ class Anony(Client):
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = self.me.mention
+
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                a = await self.get_chat_member(config.LOGGER_ID, self.me.id)
+                text=f"<u><b>» {self.mention} ʙᴏᴛ sᴛᴀʀᴛᴇᴅ :</b><u>\n\nɪᴅ : <code>{self.id}</code>\nɴᴀᴍᴇ : {self.name}\nᴜsᴇʀɴᴀᴍᴇ : @{self.username}",
             )
-        except errors.ChannelInvalid as e:
-            LOGGER("AnonXMusic").error(
-                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+        except (errors.ChannelInvalid, errors.PeerIdInvalid):
+            LOGGER(__name__).error(
+                "Bot has failed to access the log group/channel. Make sure that you have added your bot to your log group/channel."
             )
             exit()
         except errors.PeerIdInvalid as e:
