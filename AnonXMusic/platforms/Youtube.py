@@ -354,3 +354,13 @@ class YouTubeAPI:
             downloaded_file = await loop.run_in_executor(None, audio_dl)
         return downloaded_file, direct
     
+async def fetch_track_details(self, video_id: str):
+    try:
+        ydl_opts = {"quiet": True, "cookiefile": cookies_file}
+        ydl = yt_dlp.YoutubeDL(ydl_opts)
+        with ydl:
+            info = ydl.extract_info(video_id, download=False)
+            return info
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        return None
