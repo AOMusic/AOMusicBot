@@ -1,11 +1,13 @@
 from pyrogram import Client, errors
 from pyrogram.enums import ChatMemberStatus, ParseMode
+
 import config
+
 from ..logging import LOGGER
+
 
 class Anony(Client):
     def __init__(self):
-        """ Initialize the Anony bot. """
         LOGGER(__name__).info(f"Starting Bot...")
         super().__init__(
             name="AnonXMusic",
@@ -18,9 +20,8 @@ class Anony(Client):
         )
 
     async def start(self):
-        """ Start the Anony bot. """
         await super().start()
-        self.base = "(link unavailable)"
+        self.id = self.me.id
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = self.me.mention
@@ -35,34 +36,13 @@ class Anony(Client):
                 "Bot has failed to access the log group/channel. Make sure that you have added your bot to your log group/channel."
             )
             exit()
-        except errors.PeerIdInvalid as e:
-            LOGGER("AnonXMusic").error(
-                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
-            )
-            exit()
         except Exception as ex:
             LOGGER(__name__).error(
-                f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
+                f"Bot has failed to access the log group/channel.\n  Reason : {type(ex).__name__}."
             )
             exit()
-        try:
-            await Anony.stream_call("(link unavailable)")
-        except errors.ChannelInvalid as e:
-            LOGGER("AnonXMusic").error(
-                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
-            )
-            exit()
-        except errors.PeerIdInvalid as e:
-            LOGGER("AnonXMusic").error(
-                "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
-            )
-            exit()
-        except Exception as ex:
-            LOGGER(__name__).error(
-                f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
-            )
-            exit()
-        a = await self.get_chat_member(config.LOGGER_ID, (self.id))
+
+        a = await self.get_chat_member(config.LOGGER_ID, self.id)
         if a.status != ChatMemberStatus.ADMINISTRATOR:
             LOGGER(__name__).error(
                 "Please promote your bot as an admin in your log group/channel."
@@ -71,5 +51,4 @@ class Anony(Client):
         LOGGER(__name__).info(f"Music Bot Started as {self.name}")
 
     async def stop(self):
-        """ Stop the Anony bot. """
         await super().stop()
