@@ -6,10 +6,10 @@ import config
 from AnonXMusic.core.mongo import mongodb
 from .logging import LOGGER
 
-Sudoers Filter
+#Sudoers Filter
 SUDOERS = filters.user()
 
-Heroku App
+#Heroku App
 HAPP = None
 
 Boot Time
