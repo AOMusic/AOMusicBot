@@ -27,7 +27,7 @@ class Anony(Client):
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                a = await self.get_chat_member(config.LOGGER_ID, (link unavailable))
+                a = await self.get_chat_member(config.LOGGER_ID, self.me.id)
             )
         except errors.ChannelInvalid as e:
             LOGGER("AnonXMusic").error(
