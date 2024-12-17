@@ -25,7 +25,7 @@ class Anony(Client):
         Start the Anony bot.
         """
         await super().start()
-        (link unavailable) = (link unavailable)
+        self.base = "(link unavailable)"
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = self.me.mention
