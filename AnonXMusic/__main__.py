@@ -1,7 +1,9 @@
 import asyncio
 import importlib
+
 from pyrogram import idle
 from pytgcalls.exceptions import NoActiveGroupCall
+
 import config
 from AnonXMusic import LOGGER, app, userbot
 from AnonXMusic.core.call import Anony
@@ -10,8 +12,8 @@ from AnonXMusic.plugins import ALL_MODULES
 from AnonXMusic.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
+
 async def init():
-    """ Initialize the bot. """
     if (
         not config.STRING1
         and not config.STRING2
@@ -19,9 +21,7 @@ async def init():
         and not config.STRING4
         and not config.STRING5
     ):
-        LOGGER(__name__).error(
-            "Assistant client variables not defined, exiting..."
-        )
+        LOGGER(__name__).error("Assistant client variables not defined, exiting...")
         exit()
     await sudo()
     try:
@@ -40,10 +40,10 @@ async def init():
     await userbot.start()
     await Anony.start()
     try:
-        await Anony.stream_call("(link unavailable)")
+        await Anony.stream_call("https://te.legra.ph/file/29f784eb49d230ab62e9e.mp4")
     except NoActiveGroupCall:
         LOGGER("AnonXMusic").error(
-            "Please turn on the videochat of your log group/ channel.\n\nStopping Bot..."
+            "Please turn on the videochat of your log group\channel.\n\nStopping Bot..."
         )
         exit()
     except:
@@ -56,6 +56,7 @@ async def init():
     await app.stop()
     await userbot.stop()
     LOGGER("AnonXMusic").info("Stopping AnonX Music Bot...")
+
 
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(init())
