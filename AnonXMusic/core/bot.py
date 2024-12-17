@@ -1,14 +1,11 @@
 from pyrogram import Client, errors
 from pyrogram.enums import ChatMemberStatus, ParseMode
-
 import config
 from ..logging import LOGGER
 
 class Anony(Client):
     def __init__(self):
-        """
-        Initialize the Anony bot.
-        """
+        """ Initialize the Anony bot. """
         LOGGER(__name__).info(f"Starting Bot...")
         super().__init__(
             name="AnonXMusic",
@@ -21,19 +18,16 @@ class Anony(Client):
         )
 
     async def start(self):
-        """
-        Start the Anony bot.
-        """
+        """ Start the Anony bot. """
         await super().start()
         self.base = "(link unavailable)"
         self.name = self.me.first_name + " " + (self.me.last_name or "")
         self.username = self.me.username
         self.mention = self.me.mention
-
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                text = f"<u><b>» {self.mention} ʙᴏᴛ sᴛᴀʀᴛᴇᴅ :</b><u>\n\nɪᴅ : <code>{link}</code>\nɴᴀᴍᴇ : {self.name}\nᴜsᴇʀɴᴀᴍᴇ : @{self.username}"
+                text=f"<u><b>» {self.mention} ʙᴏᴛ sᴛᴀʀᴛᴇᴅ :</b><u>\n\nɪᴅ : <code>{(link unavailable)}</code>\nɴᴀᴍᴇ : {self.name}\nᴜsᴇʀɴᴀᴍᴇ : @{self.username}"
             )
         except (errors.ChannelInvalid, errors.PeerIdInvalid):
             LOGGER(__name__).error(
@@ -45,18 +39,14 @@ class Anony(Client):
                 f"Bot has failed to access the log group/channel.\n Reason : {type(ex).__name__}."
             )
             exit()
-
-        a = await self.get_chat_member(config.LOGGER_ID, link)
+        a = await self.get_chat_member(config.LOGGER_ID, (link unavailable))
         if a.status != ChatMemberStatus.ADMINISTRATOR:
             LOGGER(__name__).error(
                 "Please promote your bot as an admin in your log group/channel."
             )
             exit()
-
         LOGGER(__name__).info(f"Music Bot Started as {self.name}")
 
     async def stop(self):
-        """
-        Stop the Anony bot.
-        """
+        """ Stop the Anony bot. """
         await super().stop()
