@@ -11,6 +11,7 @@ from youtubesearchpython.__future__ import VideosSearch
 from AnonXMusic.utils.database import is_on_off
 from AnonXMusic.utils.formatters import time_to_seconds
 
+
 async def shell_cmd(cmd):
     proc = await asyncio.create_subprocess_shell(
         cmd,
@@ -25,8 +26,6 @@ async def shell_cmd(cmd):
             return errorz.decode("utf-8")
     return out.decode("utf-8")
 
-
-cookies_file = "AnonXMusic/assets/cookies.txt"
 
 class YouTubeAPI:
     def __init__(self):
@@ -122,7 +121,6 @@ class YouTubeAPI:
             link = link.split("&")[0]
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
-            "--cookies", cookies_file,
             "-g",
             "-f",
             "best[height<=?720][width<=?1280]",
@@ -142,7 +140,7 @@ class YouTubeAPI:
         if "&" in link:
             link = link.split("&")[0]
         playlist = await shell_cmd(
-            f"yt-dlp --cookies {cookies_file} -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
+            f"yt-dlp -i --get-id --flat-playlist --playlist-end {limit} --skip-download {link}"
         )
         try:
             result = playlist.split("\n")
@@ -174,37 +172,40 @@ class YouTubeAPI:
         }
         return track_details, vidid
 
-async def formats(self, link: str, videoid: Union[bool, str] = None):
-    if videoid:
-        link = self.base + link
-    if "&" in link:
-        link = link.split("&")[0]
-    ytdl_opts = {"quiet": True, "cookiefile": cookies_file}
-    ydl = yt_dlp.YoutubeDL(ytdl_opts)
-    with ydl:
-        formats_available = []
-        try:
+    async def formats(self, link: str, videoid: Union[bool, str] = None):
+        if videoid:
+            link = self.base + link
+        if "&" in link:
+            link = link.split("&")[0]
+        ytdl_opts = {"quiet": True}
+        ydl = yt_dlp.YoutubeDL(ytdl_opts)
+        with ydl:
+            formats_available = []
             r = ydl.extract_info(link, download=False)
             for format in r["formats"]:
                 try:
-                    format["format"]
-                    format["filesize"]
-                    format["format_id"]
-                    format["ext"]
-                    format["format_note"]
+                    str(format["format"])
                 except:
                     continue
                 if not "dash" in str(format["format"]).lower():
-                    formats_available.append({
-                        "format": format["format"],
-                        "filesize": format["filesize"],
-                        "format_id": format["format_id"],
-                        "ext": format["ext"],
-                        "format_note": format["format_note"],
-                        "yturl": link,
-                    })
-        except Exception as e:
-            print(f"Error: {e}")
+                    try:
+                        format["format"]
+                        format["filesize"]
+                        format["format_id"]
+                        format["ext"]
+                        format["format_note"]
+                    except:
+                        continue
+                    formats_available.append(
+                        {
+                            "format": format["format"],
+                            "filesize": format["filesize"],
+                            "format_id": format["format_id"],
+                            "ext": format["ext"],
+                            "format_note": format["format_note"],
+                            "yturl": link,
+                        }
+                    )
         return formats_available, link
 
     async def slider(
@@ -248,7 +249,6 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": cookies_file,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
@@ -266,7 +266,6 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": cookies_file,
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             info = x.extract_info(link, False)
@@ -288,7 +287,6 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
-                "cookiefile": cookies_file,  # Add cookie file option here
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
@@ -310,7 +308,6 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
                         "preferredquality": "192",
                     }
                 ],
-                "cookiefile": cookies_file,  # Add cookie file option here
             }
             x = yt_dlp.YoutubeDL(ydl_optssx)
             x.download([link])
@@ -330,7 +327,6 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
             else:
                 proc = await asyncio.create_subprocess_exec(
                     "yt-dlp",
-                    "--cookies", cookies_file,
                     "-g",
                     "-f",
                     "best[height<=?720][width<=?1280]",
@@ -348,4 +344,3 @@ async def formats(self, link: str, videoid: Union[bool, str] = None):
             direct = True
             downloaded_file = await loop.run_in_executor(None, audio_dl)
         return downloaded_file, direct
-        
