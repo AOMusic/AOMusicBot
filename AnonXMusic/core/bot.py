@@ -27,8 +27,13 @@ class Anony(Client):
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                await Anony.stream_call(f"(link unavailable)")
-            )
+                await Anony.stream_call(
+    "(link unavailable)",
+    chat_id=None,
+    disable_notifications=False,
+    replay=False,
+    link=None,
+                )
         except (errors.ChannelInvalid, errors.PeerIdInvalid):
             LOGGER(__name__).error(
                 "Bot has failed to access the log group/channel. Make sure that you have added your bot to your log group/channel."
