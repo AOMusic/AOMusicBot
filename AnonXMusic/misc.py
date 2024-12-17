@@ -2,13 +2,14 @@ import os
 import asyncio
 from .logging import LOGGER
 from pyrogram import filters
+from . import config  # config ko import kiya hai
 def is_heroku():
     return os.environ.get("DYNO", None) is not None
 def dbb():
     global db
     db = {}
     LOGGER(__name__).info(f"Local Database Initialized.")
-SUDOERS = filters.user()  # SUDOERS ko define kiya hai
+SUDOERS = filters.user()  
 async def sudo():
     global SUDOERS
     SUDOERS.add(config.OWNER_ID)
