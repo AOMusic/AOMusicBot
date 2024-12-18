@@ -15,3 +15,9 @@ requests==2.28.1
 beautifulsoup4==4.11.1
 gitpython==3.1.27
 spotipy==2.24.0
+MongoDB dependencies
+pymongo==3.12.0
+dnspython==2.2.1
+
+Asynchronous MongoDB support
+motor==2.5.1
