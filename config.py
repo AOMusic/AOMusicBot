@@ -17,15 +17,6 @@ BOT_TOKEN = getenv("6666555316:AAHT6ObREaHwIsowFiH2UFd6kkSaRfFFiQs")
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("mongodb+srv://AOMusicBot:AOMusicBot@cluster0.sibxiqk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 
-# Create MongoClient
-try:
-    client = MongoClient(MONGO_DB_URI, serverSelectionTimeoutMS=5000)  # Timeout in milliseconds
-    # Try to ping the database to check connection
-    client.admin.command('ping')
-    print("Connection successful!")
-except Exception as e:
-    print(f"Error connecting to MongoDB: {e}")
-
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", "1000"))
 
 # Chat id of a group for logging bot's activities
