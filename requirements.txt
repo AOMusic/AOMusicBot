@@ -1,6 +1,6 @@
 pyrogram==2.0.106
 pytgcalls==3.0.0.dev22
-tgcalls==3.0.0.dev6
+tgcalls==3.0.0.dev5
 python-dotenv==0.20.0
 ffmpeg-python
 youtube-search-python==1.6.6
